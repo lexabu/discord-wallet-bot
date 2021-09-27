@@ -1,0 +1,7 @@
+- [ ] can only use commands in DMs (except for `join-presale`)
+- [ ] founders can see `download-wallets` command in the help embed
+- [ ] `download-wallets` is not recognized by other users
+- [ ] add some kind of tutorial for allowing DMs from server members
+- [ ] get all wallets from db for `download-wallets` command
+- [x] fix object bug with `view-wallets`
+- [ ] test that only founders can use `download-wallets`
