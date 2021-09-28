@@ -35,7 +35,7 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES,
     Intents.FLAGS.GUILD_PRESENCES,
   ],
-  partials: ['CHANNEL', 'USER', 'GUILD_MEMBER', 'MESSAGE', 'REACTION'],
+  partials: ['CHANNEL', 'USER', 'GUILD_MEMBER', 'MESSAGE'],
 });
 
 const SERVER_ID = '870075047543459871'; // testing
