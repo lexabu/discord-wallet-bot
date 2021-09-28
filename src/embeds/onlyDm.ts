@@ -1,6 +1,8 @@
-import { MessageEmbed } from 'discord.js';
+import { embedFactory } from './embedFactory';
 
-export const onlyDmEmbed = new MessageEmbed()
-  .setColor('#2a9d8f')
-  .setTitle('Check your Direct Messages')
-  .setDescription('');
+export const onlyDmEmbed = embedFactory({
+  description:
+    'This channel is only for summoning the bot to DM you. Please only use the `!join-presale` command here.',
+  severity: 'error',
+  title: 'Whoa there ✋',
+});

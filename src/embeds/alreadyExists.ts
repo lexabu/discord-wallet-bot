@@ -1,10 +1,9 @@
-import { MessageEmbed } from 'discord.js';
+import { embedFactory } from './embedFactory';
 
-export const alreadyExistsEmbed = new MessageEmbed()
-  .setColor('#e9c46a')
-  .setTitle('User already exists')
-  .setDescription(
-    `You already have a wallet address in the presale.
-    Use \`\`!change-wallet\`\` to change your address.
-    example: \`\`!change-wallet 0x1234567890123456789012345678901234567890\`\``,
-  );
+export const alreadyExistsEmbed = embedFactory({
+  description: `You already have a wallet address on the presale list. Use \`!change-wallet\` to change the wallet address that you have on the presale list.
+
+    Example: \`!change-wallet 0x1234567890123456789012345678901234567890\``,
+  severity: 'warn',
+  title: 'User already exists  ✋',
+});

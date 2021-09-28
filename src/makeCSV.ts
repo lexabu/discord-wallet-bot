@@ -1,7 +1,6 @@
 const ObjectsToCsv = require('objects-to-csv');
 
 type PresaleEntry = {
-  id: string;
   username: string;
   walletAddress: string;
 };

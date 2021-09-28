@@ -1,10 +1,10 @@
-import { Document, MongoClient } from 'mongodb';
+import { DeleteResult, MongoClient, UpdateResult } from 'mongodb';
 import { config } from 'dotenv';
 
 config();
 
 type PresaleEntry = {
-  id: string;
+  _id: string;
   username: string;
   walletAddress: string;
 };
@@ -31,9 +31,7 @@ export async function getPresaleList(): Promise<PresaleEntry[]> {
     const database = mongoDBClient.db('wallet-bot');
     const entries = database.collection<PresaleEntry>('presale-entries');
 
-    const cursor = await entries.find({});
-
-    return cursor.toArray();
+    return entries.find({}).project<PresaleEntry>({ _id: 0 }).toArray();
   } catch (error) {
     throw new Error(error);
   }
@@ -54,24 +52,23 @@ export async function checkIfUserExists(username: string): Promise<number> {
 export async function upsertAddress(
   username: string,
   walletAddress: string,
-): Promise<Document | Error> {
+): Promise<UpdateResult> {
   try {
     await mongoDBClient.connect();
     const database = mongoDBClient.db('wallet-bot');
     const entries = database.collection('presale-entries');
+
     return entries.updateOne(
       { username },
       { $set: { username, walletAddress } },
       { upsert: true },
     );
   } catch (error) {
-    return new Error(error);
+    throw new Error(error);
   }
 }
 
-export async function deleteAddress(
-  username: string,
-): Promise<Document | Error> {
+export async function removeAddress(username: string): Promise<DeleteResult> {
   try {
     await mongoDBClient.connect();
     const database = mongoDBClient.db('wallet-bot');
@@ -81,6 +78,6 @@ export async function deleteAddress(
       username,
     });
   } catch (error) {
-    return new Error(error);
+    throw new Error(error);
   }
 }

@@ -1,16 +1,15 @@
-import { MessageEmbed } from 'discord.js';
+import { embedFactory } from './embedFactory';
 
-export const welcomeEmbed = new MessageEmbed()
-  .setColor('#e76f51')
-  .setTitle('Please run the add-wallet command')
-  .setDescription(
-    `\`\`!add-wallet\`\` : to add your wallet address to the presale list
-example: \`\`!add-wallet 0x1234567890123456789012345678901234567890\`\`
+export const welcomeEmbed = embedFactory({
+  description: `Run the \`!add-wallet\` command to get added to the presale list.
 
-\`\`!help\`\` : to view all available commands from the bot
-example: \`\`!help\`\`
+    Example: \`!add-wallet 0x1234567890123456789012345678901234567890\`
 
-We will NEVER DM you first or ask for your private key
+    \`!help\` : to view all available commands from the bot
 
-If you get a DM from anyone claiming to be from Creepy Creams or the Piggy Bank Bot, please do not respond.`,
-  );
+    We will NEVER DM you first or ask for your private key
+
+    If you get a DM from anyone claiming to be from Creepy Creams or the Piggy Bank Bot, please do not respond.`,
+  severity: 'success',
+  title: 'Welcome!  👋',
+});

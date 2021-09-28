@@ -1,10 +1,12 @@
-import { MessageEmbed } from 'discord.js';
+import { embedFactory } from './embedFactory';
 
 export const viewEmbed = (walletAddress: string) =>
-  new MessageEmbed()
-    .setColor('#2a9d8f')
-    .setTitle('Wallet address is on the presale')
-    .setDescription(
-      `Your wallet address is on the presale list: ${walletAddress}.
-      Use \`\`!change-wallet\`\` to change the address that you have on the presale list.`,
-    );
+  embedFactory({
+    description: `Address: \`${walletAddress}\`
+
+    Use \`!change-wallet\` to change the wallet address that you have on the presale list.
+
+    Example: \`!change-wallet 0x1234567890123456789012345678901234567890\``,
+    severity: 'success',
+    title: 'Your wallet address is on the presale list!  💯',
+  });

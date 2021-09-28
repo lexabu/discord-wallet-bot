@@ -1,6 +1,6 @@
 # discord-wallet-bot
 
-a discord bot to collect users wallet addresses
+Discord bot to collect users wallet addresses
 
 ### Contributing
 
@@ -24,10 +24,28 @@ Copy `.env-example` to `.env`:
 cp .env-example .env
 ```
 
-Open `.env` and enter the Discord bot token
+Open `.env` and enter the Discord bot token and the MongoDB URI.
 
 #### Run app in development mode
 
 ```sh
 yarn dev
+```
+
+#### Run linter
+
+```sh
+yarn lint
+```
+
+#### Build app
+
+```sh
+yarn build
+```
+
+#### Run in production mode
+
+```sh
+yarn start
 ```

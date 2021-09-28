@@ -5,9 +5,10 @@ import { doesNotExistEmbed } from './doesNotExist';
 import { errorEmbed } from './error';
 import { helpEmbed } from './help';
 import { invalidFormatEmbed } from './invalidFormat';
+import { onlyDmEmbed } from './onlyDm';
 import { successAddEmbed } from './successAdd';
 import { successChangeEmbed } from './successChange';
-import { successDeleteEmbed } from './successDelete';
+import { successRemoveEmbed } from './successRemove';
 import { viewEmbed } from './view';
 import { welcomeEmbed } from './welcome';
 
@@ -19,9 +20,10 @@ export {
   errorEmbed,
   helpEmbed,
   invalidFormatEmbed,
+  onlyDmEmbed,
   successAddEmbed,
   successChangeEmbed,
-  successDeleteEmbed,
+  successRemoveEmbed,
   viewEmbed,
   welcomeEmbed,
 };
