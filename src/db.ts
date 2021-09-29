@@ -20,6 +20,7 @@ export async function getAddress(username: string): Promise<PresaleEntry> {
     const database = mongoDBClient.db('wallet-bot');
     const entries = database.collection<PresaleEntry>('presale-entries');
 
+    await mongoDBClient.close();
     return entries.findOne({ username });
   } catch (error) {
     Sentry.captureException(error, {
@@ -37,6 +38,7 @@ export async function getPresaleList(): Promise<PresaleEntry[]> {
     const database = mongoDBClient.db('wallet-bot');
     const entries = database.collection<PresaleEntry>('presale-entries');
 
+    await mongoDBClient.close();
     return entries.find({}).project<PresaleEntry>({ _id: 0 }).toArray();
   } catch (error) {
     Sentry.captureException(error, {
@@ -55,6 +57,7 @@ export async function checkIfUserExists(username: string): Promise<boolean> {
 
     const count = await entries.find({ username }).count();
 
+    await mongoDBClient.close();
     return !!count;
   } catch (error) {
     Sentry.captureException(error, {
@@ -75,6 +78,7 @@ export async function upsertAddress(
     const database = mongoDBClient.db('wallet-bot');
     const entries = database.collection('presale-entries');
 
+    await mongoDBClient.close();
     return entries.updateOne(
       { username },
       { $set: { username, walletAddress } },
@@ -97,6 +101,7 @@ export async function removeAddress(username: string): Promise<DeleteResult> {
     const database = mongoDBClient.db('wallet-bot');
     const entries = database.collection('presale-entries');
 
+    await mongoDBClient.close();
     return entries.deleteOne({
       username,
     });

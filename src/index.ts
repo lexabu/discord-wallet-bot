@@ -46,15 +46,15 @@ const client = new Client({
   partials: ['CHANNEL', 'USER', 'GUILD_MEMBER', 'MESSAGE'],
 });
 
-// const PRESALE_CHANNEL_ID = '892095055366611044'; // DEV testing
-// const SERVER_ID = '870075047543459871'; // DEV bot-testing-server id
-// const FOUNDER_ROLE_NAME = 'Admins'; // DEV testing
-// const PRESALE_ROLES = ['Admins']; // DEV testing roles
+const PRESALE_CHANNEL_ID = '892790147693821983'; // DEV testing
+const SERVER_ID = '870075047543459871'; // DEV bot-testing-server id
+const FOUNDER_ROLE_NAME = 'Admins'; // DEV testing
+const PRESALE_ROLES = ['Bot Admins']; // DEV testing roles
 
-const SERVER_ID = '892426444834218014'; // STAGING creepy creams server id
-const FOUNDER_ROLE_NAME = 'Founder'; // STAGING founders role
-const PRESALE_CHANNEL_ID = '892426529735319662'; // STAGING presale channel id
-const PRESALE_ROLES = ['OG Sundae', 'Presale Cream']; // STAGING presale roles
+// const SERVER_ID = '892426444834218014'; // STAGING creepy creams server id
+// const FOUNDER_ROLE_NAME = 'Founder'; // STAGING founders role
+// const PRESALE_CHANNEL_ID = '892426529735319662'; // STAGING presale channel id
+// const PRESALE_ROLES = ['OG Sundae', 'Presale Cream']; // STAGING presale roles
 
 // const SERVER_ID = '883617950614061078'; // PROD creepy creams server id
 // const FOUNDER_ROLE_NAME = 'Founder'; // PROD founders role
@@ -128,6 +128,7 @@ client.on('messageCreate', async message => {
           await message.reply({ embeds: [onlyDmEmbed] });
           break;
         }
+
         const [, walletAddress] = content.substring(1).split(' ');
 
         try {
@@ -163,6 +164,7 @@ client.on('messageCreate', async message => {
           await message.reply({ embeds: [onlyDmEmbed] });
           break;
         }
+
         const [, walletAddress] = content.substring(1).split(' ');
 
         try {
@@ -226,6 +228,7 @@ client.on('messageCreate', async message => {
           await message.reply({ embeds: [onlyDmEmbed] });
           break;
         }
+
         const isFounder = await checkIfFounder(id);
         await channel.send({ embeds: [helpEmbed(isFounder)] });
         break;
@@ -299,6 +302,7 @@ client.on('messageCreate', async message => {
           await message.reply({ embeds: [onlyDmEmbed] });
           break;
         }
+
         try {
           const exists = await checkIfUserExists(fullUsername);
           if (exists) {
