@@ -48,7 +48,6 @@ const client = new Client({
 });
 
 const SERVER_ID = process.env.CREEPY_CREAMS_SERVER_ID;
-const ADMIN_ROLE_NAMES = ['Demonic Devs', 'Founder'];
 const PRESALE_CHANNEL_ID = process.env.PRESALE_CHANNEL_ID;
 const PRESALE_ROLES = ['OG Sundae', 'Presale Cream'];
 
@@ -65,11 +64,17 @@ const VIEW = 'view-wallet';
 
 const checkIfAdmin = async (id: string) => {
   const guild = await client.guilds.fetch(SERVER_ID);
-  const admins = guild.roles.cache
-    .find(role => ADMIN_ROLE_NAMES.includes(role.name))
-    ?.members.map(member => member.id);
+  const founders =
+    guild.roles.cache
+      .find(role => role.name === 'Founder')
+      ?.members.map(member => member.id) || [];
 
-  return admins?.includes(id);
+  const devs =
+    guild.roles.cache
+      .find(role => role.name === 'Demonic Devs')
+      ?.members.map(member => member.id) || [];
+
+  return [...founders, ...devs]?.includes(id);
 };
 
 const checkIfEligibleForPresale = async (id: string) => {
