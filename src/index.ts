@@ -4,11 +4,12 @@ import { ethers } from 'ethers';
 import * as Sentry from '@sentry/node';
 import { makeCSV } from './makeCSV';
 import {
+  addWalletAddress,
+  changeWalletAddress,
   checkIfUserExists,
-  getAddress,
   getPresaleList,
+  getWalletAddress,
   removeAddress,
-  upsertAddress,
 } from './db';
 import {
   allowDmEmbed,
@@ -46,20 +47,10 @@ const client = new Client({
   partials: ['CHANNEL', 'USER', 'GUILD_MEMBER', 'MESSAGE'],
 });
 
-const PRESALE_CHANNEL_ID = '892790147693821983'; // DEV testing
-const SERVER_ID = '870075047543459871'; // DEV bot-testing-server id
-const FOUNDER_ROLE_NAME = 'Admins'; // DEV testing
-const PRESALE_ROLES = ['Bot Admins']; // DEV testing roles
-
-// const SERVER_ID = '892426444834218014'; // STAGING creepy creams server id
-// const FOUNDER_ROLE_NAME = 'Founder'; // STAGING founders role
-// const PRESALE_CHANNEL_ID = '892426529735319662'; // STAGING presale channel id
-// const PRESALE_ROLES = ['OG Sundae', 'Presale Cream']; // STAGING presale roles
-
-// const SERVER_ID = '883617950614061078'; // PROD creepy creams server id
-// const FOUNDER_ROLE_NAME = 'Founder'; // PROD founders role
-// const PRESALE_CHANNEL_ID = '?'; //  PROD presale channel id
-// const PRESALE_ROLES = ['OG Sundae', 'Presale Cream']; // PROD presale roles
+const SERVER_ID = process.env.CREEPY_CREAMS_SERVER_ID;
+const FOUNDER_ROLE_NAME = 'Founder';
+const PRESALE_CHANNEL_ID = process.env.PRESALE_CHANNEL_ID;
+const PRESALE_ROLES = ['OG Sundae', 'Presale Cream'];
 
 const BOT_PREFIX = '!';
 
@@ -137,7 +128,7 @@ client.on('messageCreate', async message => {
             await channel.send({ embeds: [alreadyExistsEmbed] });
           } else {
             if (ethers.utils.isAddress(walletAddress)) {
-              await upsertAddress(fullUsername, walletAddress);
+              await addWalletAddress(fullUsername, walletAddress);
               await channel.send({ embeds: [successAddEmbed] });
             } else {
               await channel.send({ embeds: [invalidFormatEmbed] });
@@ -147,7 +138,7 @@ client.on('messageCreate', async message => {
           Sentry.captureException(error, {
             tags: {
               command: ADD,
-              username: fullUsername,
+              discordUsername: fullUsername,
             },
           });
           await channel.send({ embeds: [errorEmbed] });
@@ -171,7 +162,7 @@ client.on('messageCreate', async message => {
           const exists = await checkIfUserExists(fullUsername);
           if (exists) {
             if (ethers.utils.isAddress(walletAddress)) {
-              await upsertAddress(fullUsername, walletAddress);
+              await changeWalletAddress(fullUsername, walletAddress);
               await channel.send({ embeds: [successChangeEmbed] });
             } else {
               await channel.send({ embeds: [invalidFormatEmbed] });
@@ -183,7 +174,7 @@ client.on('messageCreate', async message => {
           Sentry.captureException(error, {
             tags: {
               command: CHANGE,
-              username: fullUsername,
+              discordUsername: fullUsername,
             },
           });
         }
@@ -208,7 +199,7 @@ client.on('messageCreate', async message => {
             Sentry.captureException(error, {
               tags: {
                 command: DOWNLOAD,
-                username: fullUsername,
+                discordUsername: fullUsername,
               },
             });
             await channel.send({ embeds: [errorEmbed] });
@@ -255,7 +246,7 @@ client.on('messageCreate', async message => {
             Sentry.captureException(error, {
               tags: {
                 command: JOIN,
-                username: fullUsername,
+                discordUsername: fullUsername,
               },
             });
             await message.reply({ embeds: [errorEmbed] });
@@ -286,7 +277,7 @@ client.on('messageCreate', async message => {
           Sentry.captureException(error, {
             tags: {
               command: REMOVE,
-              username: fullUsername,
+              discordUsername: fullUsername,
             },
           });
         }
@@ -306,7 +297,7 @@ client.on('messageCreate', async message => {
         try {
           const exists = await checkIfUserExists(fullUsername);
           if (exists) {
-            const { walletAddress } = await getAddress(fullUsername);
+            const walletAddress = await getWalletAddress(fullUsername);
             await channel.send({ embeds: [viewEmbed(walletAddress)] });
           } else {
             await channel.send({ embeds: [doesNotExistEmbed] });
@@ -315,7 +306,7 @@ client.on('messageCreate', async message => {
           Sentry.captureException(error, {
             tags: {
               command: VIEW,
-              username: fullUsername,
+              discordUsername: fullUsername,
             },
           });
           await channel.send({ embeds: [errorEmbed] });

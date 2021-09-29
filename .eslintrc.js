@@ -21,6 +21,7 @@ module.exports = {
     ],
     'import/prefer-default-export': 'off',
     'no-lonely-if': 'off',
+    'prefer-destructuring': 'off',
     'prettier/prettier': 'error',
   },
   settings: {
