@@ -1,5 +1,6 @@
 import { DeleteResult, MongoClient, UpdateResult } from 'mongodb';
 import { config } from 'dotenv';
+import * as Sentry from '@sentry/node';
 
 config();
 
@@ -9,7 +10,7 @@ type PresaleEntry = {
   walletAddress: string;
 };
 
-const uri = process.env.MONGO_DB_URI as string;
+const uri = process.env.MONGO_DB_URI;
 
 const mongoDBClient = new MongoClient(uri);
 
@@ -21,7 +22,12 @@ export async function getAddress(username: string): Promise<PresaleEntry> {
 
     return entries.findOne({ username });
   } catch (error) {
-    throw new Error(error);
+    Sentry.captureException(error, {
+      tags: {
+        command: 'getAddress',
+        username,
+      },
+    });
   }
 }
 
@@ -33,19 +39,30 @@ export async function getPresaleList(): Promise<PresaleEntry[]> {
 
     return entries.find({}).project<PresaleEntry>({ _id: 0 }).toArray();
   } catch (error) {
-    throw new Error(error);
+    Sentry.captureException(error, {
+      tags: {
+        command: 'getPresaleList',
+      },
+    });
   }
 }
 
-export async function checkIfUserExists(username: string): Promise<number> {
+export async function checkIfUserExists(username: string): Promise<boolean> {
   try {
     await mongoDBClient.connect();
     const database = mongoDBClient.db('wallet-bot');
     const entries = database.collection('presale-entries');
 
-    return entries.find({ username }).count();
+    const count = await entries.find({ username }).count();
+
+    return !!count;
   } catch (error) {
-    throw new Error(error);
+    Sentry.captureException(error, {
+      tags: {
+        command: 'checkIfUserExists',
+        fetchedUsername: username,
+      },
+    });
   }
 }
 
@@ -64,7 +81,13 @@ export async function upsertAddress(
       { upsert: true },
     );
   } catch (error) {
-    throw new Error(error);
+    Sentry.captureException(error, {
+      tags: {
+        command: 'upsertAddress',
+        username,
+        walletAddress,
+      },
+    });
   }
 }
 
@@ -78,6 +101,11 @@ export async function removeAddress(username: string): Promise<DeleteResult> {
       username,
     });
   } catch (error) {
-    throw new Error(error);
+    Sentry.captureException(error, {
+      tags: {
+        command: 'removeAddress',
+        username,
+      },
+    });
   }
 }

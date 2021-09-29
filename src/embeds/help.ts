@@ -24,7 +24,7 @@ export const helpEmbed = (isFounder: boolean) =>
   }
   We will NEVER DM you first or ask for your private key
 
-  If you get a DM from anyone claiming to be from Creepy Creams or the Piggy Bank Bot, please do not respond.`,
+  If you get a DM from anyone claiming to be from Creepy Creams or the Sprinkles Bot, please do not respond.`,
     severity: 'warn',
     title: 'Help  📃',
   });
