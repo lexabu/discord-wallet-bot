@@ -48,7 +48,7 @@ const client = new Client({
 });
 
 const SERVER_ID = process.env.CREEPY_CREAMS_SERVER_ID;
-const FOUNDER_ROLE_NAME = 'Founder';
+const ADMIN_ROLE_NAMES = ['Demonic Devs', 'Founder'];
 const PRESALE_CHANNEL_ID = process.env.PRESALE_CHANNEL_ID;
 const PRESALE_ROLES = ['OG Sundae', 'Presale Cream'];
 
@@ -63,13 +63,13 @@ const REMOVE = 'remove-wallet';
 const START = 'start-presale';
 const VIEW = 'view-wallet';
 
-const checkIfFounder = async (id: string) => {
+const checkIfAdmin = async (id: string) => {
   const guild = await client.guilds.fetch(SERVER_ID);
-  const founders = guild.roles.cache
-    .find(role => role.name === FOUNDER_ROLE_NAME)
+  const admins = guild.roles.cache
+    .find(role => ADMIN_ROLE_NAMES.includes(role.name))
     ?.members.map(member => member.id);
 
-  return founders?.includes(id);
+  return admins?.includes(id);
 };
 
 const checkIfEligibleForPresale = async (id: string) => {
@@ -99,7 +99,7 @@ client.on('messageCreate', async message => {
 
     switch (command) {
       case START: {
-        const isFounder = await checkIfFounder(id);
+        const isFounder = await checkIfAdmin(id);
         if (
           isFounder &&
           channel.id === PRESALE_CHANNEL_ID &&
@@ -181,7 +181,7 @@ client.on('messageCreate', async message => {
         break;
       }
       case DOWNLOAD: {
-        const isFounder = await checkIfFounder(id);
+        const isFounder = await checkIfAdmin(id);
 
         if (isFounder) {
           try {
@@ -220,7 +220,7 @@ client.on('messageCreate', async message => {
           break;
         }
 
-        const isFounder = await checkIfFounder(id);
+        const isFounder = await checkIfAdmin(id);
         await channel.send({ embeds: [helpEmbed(isFounder)] });
         break;
       }
@@ -231,7 +231,7 @@ client.on('messageCreate', async message => {
         }
 
         if (channel.type === 'DM') {
-          const isFounder = await checkIfFounder(id);
+          const isFounder = await checkIfAdmin(id);
           await channel.send({ embeds: [helpEmbed(isFounder)] });
           break;
         }
@@ -315,7 +315,7 @@ client.on('messageCreate', async message => {
       }
       default: {
         if (channel.id === PRESALE_CHANNEL_ID || channel.type === 'DM') {
-          const isFounder = await checkIfFounder(id);
+          const isFounder = await checkIfAdmin(id);
           await channel.send({ embeds: [helpEmbed(isFounder)] });
         }
         break;
