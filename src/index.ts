@@ -85,7 +85,7 @@ const checkIfEligibleForPresale = async (id: string) => {
 
   const presaleCreamMembers =
     guild.roles.cache
-      .find(role => role.name === 'Presale Cream')
+      .find(role => role.name === 'Presale cream')
       ?.members.map(member => member.id) || [];
 
   return [...ogSundaeMembers, ...presaleCreamMembers]?.includes(id);
