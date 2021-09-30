@@ -193,7 +193,7 @@ client.on('messageCreate', async message => {
       case DOWNLOAD: {
         const isFounder = await checkIfAdmin(id);
 
-        if (isFounder) {
+        if (isFounder && channel.type === 'DM') {
           try {
             const presaleList = await getPresaleList();
             await makeCSV(presaleList);
