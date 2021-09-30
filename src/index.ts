@@ -49,7 +49,6 @@ const client = new Client({
 
 const SERVER_ID = process.env.CREEPY_CREAMS_SERVER_ID;
 const PRESALE_CHANNEL_ID = process.env.PRESALE_CHANNEL_ID;
-const PRESALE_ROLES = ['OG Sundae', 'Presale Cream'];
 
 const BOT_PREFIX = '!';
 
@@ -79,11 +78,17 @@ const checkIfAdmin = async (id: string) => {
 
 const checkIfEligibleForPresale = async (id: string) => {
   const guild = await client.guilds.fetch(SERVER_ID);
-  const eligiblePresaleMembers = guild.roles.cache
-    .find(role => PRESALE_ROLES.includes(role.name))
-    ?.members.map(member => member.id);
+  const ogSundaeMembers =
+    guild.roles.cache
+      .find(role => role.name === 'OG Sundae')
+      ?.members.map(member => member.id) || [];
 
-  return eligiblePresaleMembers?.includes(id);
+  const presaleCreamMembers =
+    guild.roles.cache
+      .find(role => role.name === 'Presale Cream')
+      ?.members.map(member => member.id) || [];
+
+  return [...ogSundaeMembers, ...presaleCreamMembers]?.includes(id);
 };
 
 client.on('messageCreate', async message => {
@@ -93,7 +98,7 @@ client.on('messageCreate', async message => {
 
   const { bot, discriminator, id, username } = author;
 
-  const isEligibleForPresale = checkIfEligibleForPresale(id);
+  const isEligibleForPresale = await checkIfEligibleForPresale(id);
 
   if (bot || !isEligibleForPresale) return;
 
