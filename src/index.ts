@@ -324,7 +324,9 @@ client.on('messageCreate', async message => {
         break;
       }
       default: {
-        if (channel.id === PRESALE_CHANNEL_ID || channel.type === 'DM') {
+        if (channel.id === PRESALE_CHANNEL_ID) {
+          await channel.send({ embeds: [onlyDmEmbed] });
+        } else if (channel.type === 'DM') {
           const isFounder = await checkIfAdmin(id);
           await channel.send({ embeds: [helpEmbed(isFounder)] });
         }
