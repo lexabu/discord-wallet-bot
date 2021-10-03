@@ -15,6 +15,7 @@ import {
   allowDmEmbed,
   alreadyExistsEmbed,
   checkDmEmbed,
+  countEmbed,
   doesNotExistEmbed,
   errorEmbed,
   helpEmbed,
@@ -54,6 +55,7 @@ const BOT_PREFIX = '!';
 
 const ADD = 'add-wallet';
 const CHANGE = 'change-wallet';
+const COUNT = 'count-presale';
 const DOWNLOAD = 'download-wallets';
 const HELP = 'help';
 const JOIN = 'join-presale';
@@ -109,9 +111,9 @@ client.on('messageCreate', async message => {
 
     switch (command) {
       case START: {
-        const isFounder = await checkIfAdmin(id);
+        const isAdmin = await checkIfAdmin(id);
         if (
-          isFounder &&
+          isAdmin &&
           channel.id === PRESALE_CHANNEL_ID &&
           channel.type !== 'DM'
         ) {
@@ -190,10 +192,32 @@ client.on('messageCreate', async message => {
         }
         break;
       }
-      case DOWNLOAD: {
-        const isFounder = await checkIfAdmin(id);
+      case COUNT: {
+        const isAdmin = await checkIfAdmin(id);
 
-        if (isFounder && channel.type === 'DM') {
+        if (isAdmin && channel.type === 'DM') {
+          try {
+            const presaleList = await getPresaleList();
+            await channel.send({ embeds: [countEmbed(presaleList.length)] });
+          } catch (error) {
+            Sentry.captureException(error, {
+              tags: {
+                command: COUNT,
+                discordUsername: fullUsername,
+              },
+            });
+            await channel.send({ embeds: [errorEmbed] });
+          }
+        } else {
+          await channel.send({ embeds: [helpEmbed(isAdmin)] });
+        }
+
+        break;
+      }
+      case DOWNLOAD: {
+        const isAdmin = await checkIfAdmin(id);
+
+        if (isAdmin && channel.type === 'DM') {
           try {
             const presaleList = await getPresaleList();
             await makeCSV(presaleList);
@@ -215,7 +239,7 @@ client.on('messageCreate', async message => {
             await channel.send({ embeds: [errorEmbed] });
           }
         } else {
-          await channel.send({ embeds: [helpEmbed(isFounder)] });
+          await channel.send({ embeds: [helpEmbed(isAdmin)] });
         }
         break;
       }
@@ -230,8 +254,8 @@ client.on('messageCreate', async message => {
           break;
         }
 
-        const isFounder = await checkIfAdmin(id);
-        await channel.send({ embeds: [helpEmbed(isFounder)] });
+        const isAdmin = await checkIfAdmin(id);
+        await channel.send({ embeds: [helpEmbed(isAdmin)] });
         break;
       }
       case JOIN: {
@@ -241,8 +265,8 @@ client.on('messageCreate', async message => {
         }
 
         if (channel.type === 'DM') {
-          const isFounder = await checkIfAdmin(id);
-          await channel.send({ embeds: [helpEmbed(isFounder)] });
+          const isAdmin = await checkIfAdmin(id);
+          await channel.send({ embeds: [helpEmbed(isAdmin)] });
           break;
         }
         const user = await client.users.fetch(id);
@@ -327,8 +351,8 @@ client.on('messageCreate', async message => {
         if (channel.id === PRESALE_CHANNEL_ID) {
           await channel.send({ embeds: [onlyDmEmbed] });
         } else if (channel.type === 'DM') {
-          const isFounder = await checkIfAdmin(id);
-          await channel.send({ embeds: [helpEmbed(isFounder)] });
+          const isAdmin = await checkIfAdmin(id);
+          await channel.send({ embeds: [helpEmbed(isAdmin)] });
         }
         break;
       }

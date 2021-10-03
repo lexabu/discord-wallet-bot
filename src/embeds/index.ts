@@ -1,6 +1,7 @@
 import { allowDmEmbed } from './allowDm';
 import { alreadyExistsEmbed } from './alreadyExists';
 import { checkDmEmbed } from './checkDm';
+import { countEmbed } from './count';
 import { doesNotExistEmbed } from './doesNotExist';
 import { errorEmbed } from './error';
 import { helpEmbed } from './help';
@@ -18,6 +19,7 @@ export {
   allowDmEmbed,
   alreadyExistsEmbed,
   checkDmEmbed,
+  countEmbed,
   doesNotExistEmbed,
   errorEmbed,
   helpEmbed,

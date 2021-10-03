@@ -1,6 +1,6 @@
 import { embedFactory } from './embedFactory';
 
-export const helpEmbed = (isFounder: boolean) =>
+export const helpEmbed = (isAdmin: boolean) =>
   embedFactory({
     description: `See the list of available commands below:
   \`!add-wallet\`: to add your wallet address to the presale list
@@ -15,10 +15,13 @@ export const helpEmbed = (isFounder: boolean) =>
   \`!view-wallet\`: to view your wallet address on the presale list
   Example: \`!view-wallet\`
   ${
-    isFounder
+    isAdmin
       ? `
-  \`!download-wallets\`: to receive a csv with all of the wallet addresses (only available to founders)
+  \`!download-wallets\`: to receive a csv with all of the wallet addresses (only available to admins)
   Example: \`!download-wallets\`
+
+  \`!count-presale\`: to get a count of how many entries are in the presale (only available to admins)
+  Example: \`!count-presale\`
   `
       : ''
   }
