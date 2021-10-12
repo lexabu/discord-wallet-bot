@@ -17,11 +17,13 @@ import {
   checkDmEmbed,
   countEmbed,
   doesNotExistEmbed,
+  doesNotExistPresaleOverEmbed,
   errorEmbed,
   helpEmbed,
   invalidFormatEmbed,
   joinPresaleEmbed,
   onlyDmEmbed,
+  presaleOverEmbed,
   successAddEmbed,
   successChangeEmbed,
   successRemoveEmbed,
@@ -93,6 +95,11 @@ const checkIfEligibleForPresale = async (id: string) => {
   return [...ogSundaeMembers, ...presaleCreamMembers]?.includes(id);
 };
 
+// Monday October 11, 2021 20:00 GMT
+const PRESALE_DEADLINE_DATE = new Date(Date.UTC(2021, 9, 11, 20, 0, 0));
+
+const isPresaleOver = () => new Date() > PRESALE_DEADLINE_DATE;
+
 client.on('messageCreate', async message => {
   const presaleChannel = await client.channels.fetch(PRESALE_CHANNEL_ID);
 
@@ -132,6 +139,11 @@ client.on('messageCreate', async message => {
           break;
         }
 
+        if (isPresaleOver()) {
+          await channel.send({ embeds: [presaleOverEmbed] });
+          break;
+        }
+
         const [, walletAddress] = content.substring(1).split(' ');
 
         try {
@@ -165,6 +177,11 @@ client.on('messageCreate', async message => {
 
         if (channel.type !== 'DM') {
           await message.reply({ embeds: [onlyDmEmbed] });
+          break;
+        }
+
+        if (isPresaleOver()) {
+          await channel.send({ embeds: [presaleOverEmbed] });
           break;
         }
 
@@ -269,7 +286,14 @@ client.on('messageCreate', async message => {
           await channel.send({ embeds: [helpEmbed(isAdmin)] });
           break;
         }
+
+        if (isPresaleOver()) {
+          await channel.send({ embeds: [presaleOverEmbed] });
+          break;
+        }
+
         const user = await client.users.fetch(id);
+
         try {
           await user.send({ embeds: [welcomeEmbed] });
           await message.reply({ embeds: [checkDmEmbed] });
@@ -296,6 +320,11 @@ client.on('messageCreate', async message => {
 
         if (channel.type !== 'DM') {
           await message.reply({ embeds: [onlyDmEmbed] });
+          break;
+        }
+
+        if (isPresaleOver()) {
+          await channel.send({ embeds: [presaleOverEmbed] });
           break;
         }
 
@@ -334,7 +363,11 @@ client.on('messageCreate', async message => {
             const walletAddress = await getWalletAddress(fullUsername);
             await channel.send({ embeds: [viewEmbed(walletAddress)] });
           } else {
-            await channel.send({ embeds: [doesNotExistEmbed] });
+            if (isPresaleOver()) {
+              await channel.send({ embeds: [doesNotExistPresaleOverEmbed] });
+            } else {
+              await channel.send({ embeds: [doesNotExistEmbed] });
+            }
           }
         } catch (error) {
           Sentry.captureException(error, {

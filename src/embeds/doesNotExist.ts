@@ -1,7 +1,7 @@
 import { embedFactory } from './embedFactory';
 
 export const doesNotExistEmbed = embedFactory({
-  description: `You do not have a wallet address on the presale yet.
+  description: `You do not have a wallet address on the presale list yet.
 
 Use \`!add-wallet\` to add your wallet address.
 
