@@ -109,7 +109,7 @@ client.on('messageCreate', async message => {
 
   const isEligibleForPresale = await checkIfEligibleForPresale(id);
 
-  if (bot || !isEligibleForPresale) return;
+  if (!checkIfAdmin(id) && (bot || !isEligibleForPresale)) return;
 
   const fullUsername = `${username}#${discriminator}`;
 
