@@ -26,7 +26,7 @@ export const addWalletAddress = async (
   username: string,
   walletAddress: string,
 ) => {
-  const kind = 'creepy-creams';
+  const kind = 'creepy-creams-2';
 
   const key = datastore.key([kind]);
 
@@ -58,7 +58,7 @@ export const changeWalletAddress = async (
   walletAddress: string,
 ) => {
   const query = datastore
-    .createQuery('creepy-creams')
+    .createQuery('creepy-creams-2')
     .filter('discordUsername', '=', username);
 
   const [result] = await datastore.runQuery(query);
@@ -88,7 +88,7 @@ export const changeWalletAddress = async (
 export async function getWalletAddress(username: string): Promise<string> {
   try {
     const query = datastore
-      .createQuery('creepy-creams')
+      .createQuery('creepy-creams-2')
       .filter('discordUsername', '=', username);
 
     const [results] = await datastore.runQuery(query);
@@ -112,7 +112,7 @@ export async function getWalletAddress(username: string): Promise<string> {
 
 export async function getPresaleList(): Promise<PresaleEntry[]> {
   try {
-    const query = datastore.createQuery('creepy-creams');
+    const query = datastore.createQuery('creepy-creams-2');
 
     const [results] = await datastore.runQuery(query);
 
@@ -132,7 +132,7 @@ export async function getPresaleList(): Promise<PresaleEntry[]> {
 export async function checkIfUserExists(username: string): Promise<boolean> {
   try {
     const query = datastore
-      .createQuery('creepy-creams')
+      .createQuery('creepy-creams-2')
       .filter('discordUsername', '=', username);
 
     const [result] = await datastore.runQuery(query);
@@ -151,7 +151,7 @@ export async function checkIfUserExists(username: string): Promise<boolean> {
 export const removeAddress = async (username: string) => {
   try {
     const query = datastore
-      .createQuery('creepy-creams')
+      .createQuery('creepy-creams-2')
       .filter('discordUsername', '=', username);
 
     const [result] = await datastore.runQuery(query);
