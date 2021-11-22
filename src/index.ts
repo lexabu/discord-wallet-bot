@@ -95,8 +95,8 @@ const checkIfEligibleForPresale = async (id: string) => {
   return [...mechaPilotMembers, ...certifiedScoopMembers]?.includes(id);
 };
 
-// Monday November 20, 2021 20:00 GMT
-const PRESALE_DEADLINE_DATE = new Date(Date.UTC(2021, 10, 20, 20, 0, 0));
+// December 3, 2021 20:00 GMT
+const PRESALE_DEADLINE_DATE = new Date(Date.UTC(2021, 11, 3, 20, 0, 0));
 
 const isPresaleOver = () => new Date() > PRESALE_DEADLINE_DATE;
 
