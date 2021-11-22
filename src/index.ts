@@ -82,21 +82,21 @@ const checkIfAdmin = async (id: string) => {
 
 const checkIfEligibleForPresale = async (id: string) => {
   const guild = await client.guilds.fetch(SERVER_ID);
-  const ogSundaeMembers =
+  const mechaPilotMembers =
     guild.roles.cache
-      .find(role => role.name === 'OG Sundae')
+      .find(role => role.name === 'Mecha Pilot')
       ?.members.map(member => member.id) || [];
 
-  const presaleCreamMembers =
+  const certifiedScoopMembers =
     guild.roles.cache
-      .find(role => role.name === 'Presale cream')
+      .find(role => role.name === 'Certified Scoop')
       ?.members.map(member => member.id) || [];
 
-  return [...ogSundaeMembers, ...presaleCreamMembers]?.includes(id);
+  return [...mechaPilotMembers, ...certifiedScoopMembers]?.includes(id);
 };
 
-// Monday October 11, 2021 20:00 GMT
-const PRESALE_DEADLINE_DATE = new Date(Date.UTC(2021, 9, 11, 20, 0, 0));
+// Monday November 20, 2021 20:00 GMT
+const PRESALE_DEADLINE_DATE = new Date(Date.UTC(2021, 10, 20, 20, 0, 0));
 
 const isPresaleOver = () => new Date() > PRESALE_DEADLINE_DATE;
 
