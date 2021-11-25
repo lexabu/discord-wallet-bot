@@ -92,7 +92,22 @@ const checkIfEligibleForPresale = async (id: string) => {
       .find(role => role.name === 'Certified Scoop')
       ?.members.map(member => member.id) || [];
 
-  return [...mechaPilotMembers, ...certifiedScoopMembers]?.includes(id);
+  const mechaRaidersMembers =
+    guild.roles.cache
+      .find(role => role.name === 'Mecha Raiders')
+      ?.members.map(member => member.id) || [];
+
+  const noidMembers =
+    guild.roles.cache
+      .find(role => role.name === 'Noid')
+      ?.members.map(member => member.id) || [];
+
+  return [
+    ...mechaPilotMembers,
+    ...certifiedScoopMembers,
+    ...mechaRaidersMembers,
+    ...noidMembers,
+  ]?.includes(id);
 };
 
 // December 3, 2021 20:00 GMT
